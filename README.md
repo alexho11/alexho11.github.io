@@ -1,6 +1,6 @@
-# Alex Ho – Academic Homepage
+# Alex Ho –  Homepage
 
-This repository contains the source code of my personal academic homepage, built with Jekyll.
+This repository contains the source code of my personal homepage, built with Jekyll.
 
 🔗 **Live site**: https://alexho11.github.io
 
