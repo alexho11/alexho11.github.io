@@ -27,3 +27,8 @@ I received my Master of Science degree in Navigation (ESPACE) from the Technical
 # Educations
 - 2023.10 - 2025.12, **Master of Science** in ESPACE, Technical University of Munich, Munich Germany
 - 2019.10 - 2022.10, **Bachelor of Science** in Geodesy, University of Stuttgart, Stuttgart Germany
+
+## Master's thesis
+
+I wrote my Master's thesis on **Real-Time PPP
+with Ambiguity Resolution** during my time at Fraunhofer IIS. A short description and full PDF are available on the dedicated thesis page: [Master's thesis page](/thesis-standalone.html).
