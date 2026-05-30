@@ -12,17 +12,17 @@
   
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: #111827;
-      --card-border: #1f2937;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --accent-blue: #3b82f6;
-      --accent-blue-glow: rgba(59, 130, 246, 0.15);
-      --accent-green: #10b981;
-      --accent-green-glow: rgba(16, 185, 129, 0.15);
-      --accent-orange: #f97316;
-      --accent-orange-glow: rgba(249, 115, 22, 0.15);
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent-blue: #2563eb;
+      --accent-blue-glow: rgba(37, 99, 235, 0.08);
+      --accent-green: #059669;
+      --accent-green-glow: rgba(5, 150, 105, 0.08);
+      --accent-orange: #ea580c;
+      --accent-orange-glow: rgba(234, 88, 12, 0.08);
       --font-outfit: 'Outfit', sans-serif;
       --font-inter: 'Inter', sans-serif;
       --font-mono: 'Fira Code', monospace;
@@ -46,7 +46,7 @@
 
     /* Header Nav */
     header {
-      background-color: rgba(17, 24, 39, 0.8);
+      background-color: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
@@ -96,13 +96,13 @@
       transition: all 0.2s ease;
       padding: 6px 12px;
       border-radius: 6px;
-      border: 1px solid transparent;
+      border: 1px solid var(--card-border);
     }
 
     .back-btn:hover {
       color: var(--text-main);
-      border-color: var(--card-border);
-      background-color: rgba(255, 255, 255, 0.03);
+      background-color: rgba(0, 0, 0, 0.02);
+      border-color: var(--text-muted);
     }
 
     /* Main Container */
@@ -126,7 +126,7 @@
       font-family: var(--font-outfit);
       font-size: 36px;
       font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 8px;
@@ -160,6 +160,7 @@
       align-items: center;
       gap: 8px;
       transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .action-btn:hover {
@@ -168,12 +169,13 @@
     }
 
     .action-btn.primary {
-      background: linear-gradient(135deg, var(--accent-blue) 0%, #1e40af 100%);
+      background: linear-gradient(135deg, var(--accent-blue) 0%, #1d4ed8 100%);
       border: none;
+      color: #ffffff;
     }
 
     .action-btn.primary:hover {
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
     /* Grid Layout */
@@ -197,9 +199,43 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
       position: relative;
       overflow: hidden;
+    }
+
+    .card a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .card a:hover {
+      text-decoration: underline;
+      color: #1d4ed8;
+    }
+
+    .ls-ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .ls-ref-table th, .ls-ref-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .ls-ref-table th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .ls-table-row {
+      transition: background-color 0.2s ease, font-weight 0.2s ease;
     }
 
     .card::before {
@@ -255,7 +291,7 @@
     }
 
     input {
-      background-color: rgba(255, 255, 255, 0.03);
+      background-color: #f8fafc;
       border: 1px solid var(--card-border);
       border-radius: 6px;
       color: var(--text-main);
@@ -269,14 +305,14 @@
     input:focus {
       outline: none;
       border-color: var(--accent-color, var(--accent-blue));
-      background-color: rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.1);
+      background-color: #ffffff;
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.1);
     }
 
     /* Helper styling for readonly fields */
     input[readonly] {
-      background-color: rgba(0, 0, 0, 0.2);
-      color: #93c5fd;
+      background-color: #f1f5f9;
+      color: #1e3a8a;
       border-color: var(--card-border);
       cursor: default;
     }
@@ -304,7 +340,7 @@
 
     .copy-btn:hover {
       color: var(--text-main);
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: rgba(0, 0, 0, 0.05);
     }
 
     .copy-btn svg {
@@ -328,7 +364,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      background-color: rgba(255, 255, 255, 0.01);
+      background-color: #f8fafc;
       padding: 16px;
       border-radius: 8px;
       border: 1px solid var(--card-border);
@@ -343,6 +379,7 @@
     .leap-control input {
       width: 80px;
       text-align: center;
+      background-color: #ffffff;
     }
 
     .checkbox-container {
@@ -365,6 +402,7 @@
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 28px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .docs-section h2 {
@@ -392,7 +430,7 @@
       font-family: var(--font-outfit);
       font-size: 16px;
       margin-bottom: 8px;
-      color: #93c5fd;
+      color: var(--accent-blue);
     }
 
     .doc-block p, .doc-block ul {
@@ -408,7 +446,7 @@
     }
 
     footer {
-      background-color: #090d16;
+      background-color: #f1f5f9;
       border-top: 1px solid var(--card-border);
       padding: 24px;
       text-align: center;
@@ -437,7 +475,7 @@
       border-radius: 6px;
       font-size: 14px;
       font-weight: 500;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
       transform: translateY(100px);
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -474,16 +512,6 @@
     <div class="hero">
       <h1>GPS Time Calculator</h1>
       <p>Convert UTC calendar time and date into GPS Week and Seconds of Week (SOW) formats.</p>
-    </div>
-
-    <div class="actions-panel">
-      <button class="action-btn primary" id="btn-now">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        Set to Current Time
-      </button>
     </div>
 
     <div class="dashboard-grid">
@@ -528,6 +556,16 @@
           <div class="form-group">
             <label for="utc-sec">Seconds</label>
             <input type="number" id="utc-sec" min="0" max="59" step="any" placeholder="SS.SSS">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="utc-doy">Day of Year (DOY)</label>
+          <div class="copyable-wrapper">
+            <input type="number" id="utc-doy" readonly placeholder="DOY">
+            <button class="copy-btn" data-target="utc-doy" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
           </div>
         </div>
       </div>
@@ -592,13 +630,52 @@
             <span>Set automatically based on Date</span>
           </label>
         </div>
+
+        <details style="margin-top: -8px; cursor: pointer; font-size: 13px;">
+          <summary style="color: var(--accent-blue); font-weight: 500; outline: none; margin-bottom: 8px;">
+            View Leap Seconds Reference Table
+          </summary>
+          <div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--card-border); border-radius: 6px;">
+            <table class="ls-ref-table">
+              <thead>
+                <tr style="position: sticky; top: 0; z-index: 10;">
+                  <th>UTC Date</th>
+                  <th style="text-align: right;">Offset (GPS &minus; UTC)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="ls-table-row" id="ls-row-0"><td>Jan 6, 1980 (GPS Epoch)</td><td style="text-align: right; font-family: var(--font-mono);">0 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-1"><td>Jul 1, 1981</td><td style="text-align: right; font-family: var(--font-mono);">+1 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-2"><td>Jul 1, 1982</td><td style="text-align: right; font-family: var(--font-mono);">+2 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-3"><td>Jul 1, 1983</td><td style="text-align: right; font-family: var(--font-mono);">+3 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-4"><td>Jul 1, 1985</td><td style="text-align: right; font-family: var(--font-mono);">+4 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-5"><td>Jan 1, 1988</td><td style="text-align: right; font-family: var(--font-mono);">+5 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-6"><td>Jan 1, 1990</td><td style="text-align: right; font-family: var(--font-mono);">+6 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-7"><td>Jan 1, 1991</td><td style="text-align: right; font-family: var(--font-mono);">+7 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-8"><td>Jul 1, 1992</td><td style="text-align: right; font-family: var(--font-mono);">+8 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-9"><td>Jul 1, 1993</td><td style="text-align: right; font-family: var(--font-mono);">+9 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-10"><td>Jul 1, 1994</td><td style="text-align: right; font-family: var(--font-mono);">+10 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-11"><td>Jan 1, 1996</td><td style="text-align: right; font-family: var(--font-mono);">+11 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-12"><td>Jul 1, 1997</td><td style="text-align: right; font-family: var(--font-mono);">+12 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-13"><td>Jan 1, 1999</td><td style="text-align: right; font-family: var(--font-mono);">+13 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-14"><td>Jan 1, 2006</td><td style="text-align: right; font-family: var(--font-mono);">+14 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-15"><td>Jan 1, 2009</td><td style="text-align: right; font-family: var(--font-mono);">+15 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-16"><td>Jul 1, 2012</td><td style="text-align: right; font-family: var(--font-mono);">+16 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-17"><td>Jul 1, 2015</td><td style="text-align: right; font-family: var(--font-mono);">+17 s</td></tr>
+                <tr class="ls-table-row" id="ls-row-18"><td>Jan 1, 2017 to Present</td><td style="text-align: right; font-family: var(--font-mono);">+18 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </div>
 
     <!-- Explanations & Theory Docs -->
-    <div class="docs-section">
-      <h2>GNSS Time Scale Reference Theory</h2>
-      <div class="docs-grid">
+    <details class="docs-section" style="cursor: pointer;">
+      <summary style="font-family: var(--font-outfit); font-size: 20px; font-weight: 600; outline: none; color: var(--text-main);">
+        GNSS Time Scale Reference Theory
+      </summary>
+      <div class="docs-grid" style="cursor: default; margin-top: 16px;">
         <div class="doc-block">
           <h3>GPS Time (GPST)</h3>
           <p>
@@ -622,7 +699,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </details>
   </main>
 
   <!-- Toast Element -->
@@ -685,6 +762,7 @@
       utcHour: document.getElementById('utc-hour'),
       utcMin: document.getElementById('utc-min'),
       utcSec: document.getElementById('utc-sec'),
+      utcDoy: document.getElementById('utc-doy'),
 
       gpsWeek: document.getElementById('gps-week'),
       gpsWeekMod: document.getElementById('gps-weekmod'),
@@ -725,6 +803,11 @@
       const secondsWithMs = utcDate.getUTCSeconds() + (utcDate.getUTCMilliseconds() / 1000);
       inputs.utcSec.value = secondsWithMs.toFixed(3);
 
+      // Compute DOY
+      const startOfYear = Date.UTC(utcDate.getUTCFullYear(), 0, 1);
+      const doy = Math.floor((utcMs - startOfYear) / MS_PER_DAY) + 1;
+      inputs.utcDoy.value = doy;
+
       // Compute GPS week and seconds of week
       const gpsUnixMs = utcMs + (offset * 1000);
       const gpsEpochMs = gpsUnixMs - GPS_EPOCH_MS;
@@ -741,6 +824,17 @@
         inputs.gpsWeek.value = '';
         inputs.gpsWeekMod.value = '';
         inputs.gpsSow.value = '';
+      }
+
+      // Highlight row in our leap second table
+      document.querySelectorAll('.ls-table-row').forEach(row => {
+        row.style.backgroundColor = '';
+        row.style.fontWeight = '';
+      });
+      const activeRow = document.getElementById(`ls-row-${offset}`);
+      if (activeRow) {
+        activeRow.style.backgroundColor = 'var(--accent-blue-glow)';
+        activeRow.style.fontWeight = '600';
       }
 
       updating = false;
@@ -841,11 +935,6 @@
       }
       const utcMs = collectUTCFromFields();
       syncFromUTC(utcMs);
-    });
-
-    // Set to current time button
-    document.getElementById('btn-now').addEventListener('click', () => {
-      syncFromUTC(Date.now());
     });
 
     // Clipboard Copy
