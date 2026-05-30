@@ -555,7 +555,7 @@
           </div>
           <div class="form-group">
             <label for="utc-sec">Seconds</label>
-            <input type="number" id="utc-sec" min="0" max="59" step="any" placeholder="SS.SSS">
+            <input type="number" id="utc-sec" min="0" max="59" step="1" placeholder="SS">
           </div>
         </div>
 
@@ -602,7 +602,7 @@
         <div class="form-group">
           <label for="gps-sow">GPS Seconds of Week</label>
           <div class="copyable-wrapper">
-            <input type="number" id="gps-sow" min="0" max="604800" step="any" placeholder="SOW">
+            <input type="number" id="gps-sow" min="0" max="604800" step="1" placeholder="SOW">
             <button class="copy-btn" data-target="gps-sow" title="Copy to clipboard">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             </button>
@@ -800,8 +800,7 @@
       inputs.utcHour.value = utcDate.getUTCHours();
       inputs.utcMin.value = utcDate.getUTCMinutes();
       
-      const secondsWithMs = utcDate.getUTCSeconds() + (utcDate.getUTCMilliseconds() / 1000);
-      inputs.utcSec.value = secondsWithMs.toFixed(3);
+      inputs.utcSec.value = utcDate.getUTCSeconds();
 
       // Compute DOY
       const startOfYear = Date.UTC(utcDate.getUTCFullYear(), 0, 1);
@@ -819,7 +818,7 @@
 
         inputs.gpsWeek.value = week;
         inputs.gpsWeekMod.value = week % 1024;
-        inputs.gpsSow.value = sow.toFixed(3);
+        inputs.gpsSow.value = Math.floor(sow);
       } else {
         inputs.gpsWeek.value = '';
         inputs.gpsWeekMod.value = '';
