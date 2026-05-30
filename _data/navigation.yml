@@ -1,5 +1,7 @@
 # main links links
 main:
+  - title: "GPS Time Converter"
+    url: "/gps-time-converter.html"
   # - title: "About Me"
   #   url: "/#about-me"
 

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPS Time Calculator — Alex Ho</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-blue: #3b82f6;
+      --accent-blue-glow: rgba(59, 130, 246, 0.15);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.15);
+      --accent-orange: #f97316;
+      --accent-orange-glow: rgba(249, 115, 22, 0.15);
+      --font-outfit: 'Outfit', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-inter);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Header Nav */
+    header {
+      background-color: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      color: var(--text-main);
+      text-decoration: none;
+      font-family: var(--font-outfit);
+      font-weight: 700;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s ease;
+    }
+
+    .logo-link:hover {
+      color: var(--accent-blue);
+    }
+
+    .logo-link svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent-blue);
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+
+    .back-btn:hover {
+      color: var(--text-main);
+      border-color: var(--card-border);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-outfit);
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Actions Panel */
+    .actions-panel {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .action-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      font-family: var(--font-outfit);
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px var(--accent-blue-glow);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--accent-blue) 0%, #1e40af 100%);
+      border: none;
+    }
+
+    .action-btn.primary:hover {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-color, var(--accent-blue));
+    }
+
+    .card.utc { --accent-color: var(--accent-blue); }
+    .card.gps { --accent-color: var(--accent-green); }
+    .card.config { --accent-color: var(--accent-orange); }
+
+    .card-title {
+      font-family: var(--font-outfit);
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .card-title svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent-color, var(--accent-blue));
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    input {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent-color, var(--accent-blue));
+      background-color: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Helper styling for readonly fields */
+    input[readonly] {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #93c5fd;
+      border-color: var(--card-border);
+      cursor: default;
+    }
+
+    .copyable-wrapper {
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .copy-btn:hover {
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .copy-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Leap Second Card */
+    .leap-config-card {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 768px) {
+      .leap-config-card {
+        grid-column: span 1;
+      }
+    }
+
+    .leap-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background-color: rgba(255, 255, 255, 0.01);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .leap-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .leap-control input {
+      width: 80px;
+      text-align: center;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .checkbox-container input {
+      width: auto;
+      cursor: pointer;
+    }
+
+    /* Explanation Footer styling */
+    .docs-section {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .docs-section h2 {
+      font-family: var(--font-outfit);
+      font-size: 22px;
+      margin-bottom: 16px;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+    }
+
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .docs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .doc-block h3 {
+      font-family: var(--font-outfit);
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #93c5fd;
+    }
+
+    .doc-block p, .doc-block ul {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .doc-block ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-top: 6px;
+    }
+
+    footer {
+      background-color: #090d16;
+      border-top: 1px solid var(--card-border);
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Custom Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo-link">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        <span>Alex Ho</span>
+      </a>
+      <a href="/" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Homepage
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>GPS Time Calculator</h1>
+      <p>Convert UTC calendar time and date into GPS Week and Seconds of Week (SOW) formats.</p>
+    </div>
+
+    <div class="actions-panel">
+      <button class="action-btn primary" id="btn-now">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Set to Current Time
+      </button>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- UTC Card -->
+      <div class="card utc">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24">
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm3.3 14.3L11 12.9V7h1.5v5.2l3.7 2.2-.7 1.1z"/>
+          </svg>
+          UTC Time and Date
+        </div>
+
+        <div class="form-group">
+          <label for="utc-datetime">Date & Time Picker</label>
+          <input type="datetime-local" id="utc-datetime" step="1">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="utc-year">Year</label>
+            <input type="number" id="utc-year" placeholder="YYYY">
+          </div>
+          <div class="form-group">
+            <label for="utc-month">Month</label>
+            <input type="number" id="utc-month" min="1" max="12" placeholder="MM">
+          </div>
+          <div class="form-group">
+            <label for="utc-day">Day</label>
+            <input type="number" id="utc-day" min="1" max="31" placeholder="DD">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="utc-hour">Hour</label>
+            <input type="number" id="utc-hour" min="0" max="23" placeholder="HH">
+          </div>
+          <div class="form-group">
+            <label for="utc-min">Minutes</label>
+            <input type="number" id="utc-min" min="0" max="59" placeholder="MM">
+          </div>
+          <div class="form-group">
+            <label for="utc-sec">Seconds</label>
+            <input type="number" id="utc-sec" min="0" max="59" step="any" placeholder="SS.SSS">
+          </div>
+        </div>
+      </div>
+
+      <!-- GPS Card -->
+      <div class="card gps">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          GPS Time
+        </div>
+
+        <div class="form-group">
+          <label for="gps-week">GPS Week</label>
+          <div class="copyable-wrapper">
+            <input type="number" id="gps-week" min="0" placeholder="Week">
+            <button class="copy-btn" data-target="gps-week" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gps-weekmod">GPS Week mod 1024</label>
+          <div class="copyable-wrapper">
+            <input type="number" id="gps-weekmod" readonly placeholder="Week mod 1024">
+            <button class="copy-btn" data-target="gps-weekmod" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="gps-sow">GPS Seconds of Week</label>
+          <div class="copyable-wrapper">
+            <input type="number" id="gps-sow" min="0" max="604800" step="any" placeholder="SOW">
+            <button class="copy-btn" data-target="gps-sow" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leap Second config Card -->
+      <div class="card config leap-config-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+          Leap Seconds Configuration
+        </div>
+
+        <div class="leap-input-row">
+          <div class="leap-control">
+            <label for="leap-offset">Leap Seconds Offset (GPS &minus; UTC)</label>
+            <input type="number" id="leap-offset" placeholder="18">
+          </div>
+          
+          <label class="checkbox-container">
+            <input type="checkbox" id="leap-auto" checked>
+            <span>Set automatically based on Date</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanations & Theory Docs -->
+    <div class="docs-section">
+      <h2>GNSS Time Scale Reference Theory</h2>
+      <div class="docs-grid">
+        <div class="doc-block">
+          <h3>GPS Time (GPST)</h3>
+          <p>
+            GPS Time is a continuous atomic time scale without leap seconds. It started at <strong>00:00:00 UTC on Sunday, January 6, 1980</strong>. 
+            Because UTC occasionally implements leap seconds to remain synchronized with Earth's rotation (UT1), UTC has fallen behind GPS time.
+          </p>
+          <ul>
+            <li><strong>Leap Seconds:</strong> GPS is currently 18 seconds ahead of UTC (as of Jan 1, 2017).</li>
+            <li><strong>Rollovers:</strong> The GPS week count is stored as a 10-bit binary value, rolling over every 1024 weeks (19.6 years). Rollovers occurred in August 1999 and April 2019.</li>
+          </ul>
+        </div>
+        <div class="doc-block">
+          <h3>Other GNSS Scales</h3>
+          <p>
+            Global navigation satellite systems operate on varying time scales designed to avoid discontinuities:
+          </p>
+          <ul>
+            <li><strong>Galileo System Time (GST):</strong> Continuous atomic time starting on August 22, 1999. It is synchronized with GPS time (modulo minor nanosecond offsets).</li>
+            <li><strong>BeiDou Time (BDT):</strong> Continuous atomic time starting on January 1, 2006. It maintains a constant offset of 14 seconds behind GPS time (BDT = GPS - 14s).</li>
+            <li><strong>GLONASS Time:</strong> Runs on Russian UTC+3 (Moscow time) and, unlike other GNSS systems, includes leap seconds, which means GLONASS receivers must handle the occasional 1-second step adjustment.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Element -->
+  <div class="toast" id="copy-toast">Value copied to clipboard!</div>
+
+  <footer>
+    <p>&copy; 2026 Alex Ho. Academic homepage built with Jekyll. <a href="/">Back to Homepage</a></p>
+  </footer>
+
+  <script>
+    // GPS Epoch in milliseconds (Jan 6, 1980 00:00:00 UTC)
+    const GPS_EPOCH_MS = Date.UTC(1980, 0, 6, 0, 0, 0);
+    const MS_PER_DAY = 86400000;
+    const SECS_PER_WEEK = 604800;
+
+    // Leap seconds database (UTC transitions)
+    const leapSecondsTable = [
+      { ms: Date.UTC(1980, 0, 6), offset: 0 },
+      { ms: Date.UTC(1981, 6, 1), offset: 1 },
+      { ms: Date.UTC(1982, 6, 1), offset: 2 },
+      { ms: Date.UTC(1983, 6, 1), offset: 3 },
+      { ms: Date.UTC(1985, 6, 1), offset: 4 },
+      { ms: Date.UTC(1988, 0, 1), offset: 5 },
+      { ms: Date.UTC(1990, 0, 1), offset: 6 },
+      { ms: Date.UTC(1991, 0, 1), offset: 7 },
+      { ms: Date.UTC(1992, 6, 1), offset: 8 },
+      { ms: Date.UTC(1993, 6, 1), offset: 9 },
+      { ms: Date.UTC(1994, 6, 1), offset: 10 },
+      { ms: Date.UTC(1996, 0, 1), offset: 11 },
+      { ms: Date.UTC(1997, 6, 1), offset: 12 },
+      { ms: Date.UTC(1999, 0, 1), offset: 13 },
+      { ms: Date.UTC(2006, 0, 1), offset: 14 },
+      { ms: Date.UTC(2009, 0, 1), offset: 15 },
+      { ms: Date.UTC(2012, 6, 1), offset: 16 },
+      { ms: Date.UTC(2015, 6, 1), offset: 17 },
+      { ms: Date.UTC(2017, 0, 1), offset: 18 }
+    ];
+
+    function getLeapSecondsForUTC(utcMs) {
+      let offset = 0;
+      for (const entry of leapSecondsTable) {
+        if (utcMs >= entry.ms) {
+          offset = entry.offset;
+        } else {
+          break;
+        }
+      }
+      return offset;
+    }
+
+    // Inter-field synchronization locks
+    let updating = false;
+
+    // Elements
+    const inputs = {
+      utcDatetime: document.getElementById('utc-datetime'),
+      utcYear: document.getElementById('utc-year'),
+      utcMonth: document.getElementById('utc-month'),
+      utcDay: document.getElementById('utc-day'),
+      utcHour: document.getElementById('utc-hour'),
+      utcMin: document.getElementById('utc-min'),
+      utcSec: document.getElementById('utc-sec'),
+
+      gpsWeek: document.getElementById('gps-week'),
+      gpsWeekMod: document.getElementById('gps-weekmod'),
+      gpsSow: document.getElementById('gps-sow'),
+
+      leapOffset: document.getElementById('leap-offset'),
+      leapAuto: document.getElementById('leap-auto')
+    };
+
+    // Calculate time offset based on current settings
+    function getActiveLeapOffset(utcMs) {
+      if (inputs.leapAuto.checked) {
+        const autoVal = getLeapSecondsForUTC(utcMs);
+        inputs.leapOffset.value = autoVal;
+        return autoVal;
+      }
+      return parseInt(inputs.leapOffset.value) || 0;
+    }
+
+    // Master sync routines
+    function syncFromUTC(utcMs) {
+      if (updating) return;
+      updating = true;
+
+      const utcDate = new Date(utcMs);
+      const offset = getActiveLeapOffset(utcMs);
+
+      // Populate UTC calendar inputs
+      const isoStr = utcDate.toISOString();
+      inputs.utcDatetime.value = isoStr.substring(0, 19);
+
+      inputs.utcYear.value = utcDate.getUTCFullYear();
+      inputs.utcMonth.value = utcDate.getUTCMonth() + 1;
+      inputs.utcDay.value = utcDate.getUTCDate();
+      inputs.utcHour.value = utcDate.getUTCHours();
+      inputs.utcMin.value = utcDate.getUTCMinutes();
+      
+      const secondsWithMs = utcDate.getUTCSeconds() + (utcDate.getUTCMilliseconds() / 1000);
+      inputs.utcSec.value = secondsWithMs.toFixed(3);
+
+      // Compute GPS week and seconds of week
+      const gpsUnixMs = utcMs + (offset * 1000);
+      const gpsEpochMs = gpsUnixMs - GPS_EPOCH_MS;
+      const gpsTotalSecs = gpsEpochMs / 1000;
+
+      if (gpsEpochMs >= 0) {
+        const week = Math.floor(gpsTotalSecs / SECS_PER_WEEK);
+        const sow = gpsTotalSecs - (week * SECS_PER_WEEK);
+
+        inputs.gpsWeek.value = week;
+        inputs.gpsWeekMod.value = week % 1024;
+        inputs.gpsSow.value = sow.toFixed(3);
+      } else {
+        inputs.gpsWeek.value = '';
+        inputs.gpsWeekMod.value = '';
+        inputs.gpsSow.value = '';
+      }
+
+      updating = false;
+    }
+
+    function syncFromGPST(week, sow) {
+      if (updating) return;
+      updating = true;
+
+      const gpsTotalSecs = (week * SECS_PER_WEEK) + sow;
+      const gpsEpochMs = gpsTotalSecs * 1000;
+      const gpsUnixMs = gpsEpochMs + GPS_EPOCH_MS;
+
+      // Determine offset
+      let offset = 0;
+      if (inputs.leapAuto.checked) {
+        // Approximate lookup using GPS timestamp
+        for (let i = 0; i < leapSecondsTable.length; i++) {
+          const priorOffset = i > 0 ? leapSecondsTable[i-1].offset : 0;
+          const transitionGpsMs = leapSecondsTable[i].ms + priorOffset * 1000;
+          if (gpsUnixMs >= transitionGpsMs) {
+            offset = leapSecondsTable[i].offset;
+          } else {
+            break;
+          }
+        }
+        inputs.leapOffset.value = offset;
+      } else {
+        offset = parseInt(inputs.leapOffset.value) || 0;
+      }
+
+      const utcMs = gpsUnixMs - (offset * 1000);
+      
+      updating = false;
+      syncFromUTC(utcMs);
+    }
+
+    // Input listeners: UTC datetime picker
+    inputs.utcDatetime.addEventListener('input', (e) => {
+      if (!e.target.value) return;
+      const utcMs = new Date(e.target.value + "Z").getTime();
+      syncFromUTC(utcMs);
+    });
+
+    // Input listeners: UTC manual fields
+    function collectUTCFromFields() {
+      const year = parseInt(inputs.utcYear.value) || 1980;
+      const month = (parseInt(inputs.utcMonth.value) || 1) - 1;
+      const day = parseInt(inputs.utcDay.value) || 1;
+      const hour = parseInt(inputs.utcHour.value) || 0;
+      const min = parseInt(inputs.utcMin.value) || 0;
+      
+      const secVal = parseFloat(inputs.utcSec.value) || 0;
+      const sec = Math.floor(secVal);
+      const ms = Math.round((secVal - sec) * 1000);
+
+      return Date.UTC(year, month, day, hour, min, sec, ms);
+    }
+
+    ['utcYear', 'utcMonth', 'utcDay', 'utcHour', 'utcMin', 'utcSec'].forEach(field => {
+      inputs[field].addEventListener('input', () => {
+        const utcMs = collectUTCFromFields();
+        syncFromUTC(utcMs);
+      });
+    });
+
+    // Input listeners: GPS fields
+    function collectGPSValues() {
+      const week = parseInt(inputs.gpsWeek.value) || 0;
+      const sow = parseFloat(inputs.gpsSow.value) || 0;
+      return { week, sow };
+    }
+
+    inputs.gpsWeek.addEventListener('input', () => {
+      const { week, sow } = collectGPSValues();
+      syncFromGPST(week, sow);
+    });
+
+    inputs.gpsSow.addEventListener('input', () => {
+      const { week, sow } = collectGPSValues();
+      syncFromGPST(week, sow);
+    });
+
+    // Input listeners: Leap Second adjustments
+    inputs.leapOffset.addEventListener('input', () => {
+      if (!inputs.leapAuto.checked) {
+        // Trigger sync from current UTC values to refresh GPS SOW/Week
+        const utcMs = collectUTCFromFields();
+        syncFromUTC(utcMs);
+      }
+    });
+
+    inputs.leapAuto.addEventListener('change', () => {
+      if (inputs.leapAuto.checked) {
+        inputs.leapOffset.setAttribute('readonly', 'readonly');
+      } else {
+        inputs.leapOffset.removeAttribute('readonly');
+      }
+      const utcMs = collectUTCFromFields();
+      syncFromUTC(utcMs);
+    });
+
+    // Set to current time button
+    document.getElementById('btn-now').addEventListener('click', () => {
+      syncFromUTC(Date.now());
+    });
+
+    // Clipboard Copy
+    const toast = document.getElementById('copy-toast');
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const inputEl = document.getElementById(targetId);
+        if (inputEl) {
+          navigator.clipboard.writeText(inputEl.value).then(() => {
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+            }, 2000);
+          });
+        }
+      });
+    });
+
+    // Initialization
+    if (inputs.leapAuto.checked) {
+      inputs.leapOffset.setAttribute('readonly', 'readonly');
+    }
+    syncFromUTC(Date.now());
+
+  </script>
+</body>
+</html>
